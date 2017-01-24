@@ -17,8 +17,8 @@ def yahoo_api():
 		try:
 			#Connect to database
 			now = datetime.now()
-			mktopen = now.replace(hour=9, minute=15, second=0, microsecond=0)
-			mktclose = now.replace(hour=15, minute=30, second=0, microsecond=0)
+			mktopen = now.replace(hour=14, minute=45, second=0, microsecond=0)
+			mktclose = now.replace(hour=19, minute=30, second=0, microsecond=0)
 			print("Time is "+str(now))
 			print ("Is market open? " + str(now > mktopen and now < mktclose))
 			if now < mktopen or now > mktclose:
@@ -27,12 +27,6 @@ def yahoo_api():
 				continue
 			conn = connect.heroku()
 			cursor = conn.cursor()
-			
-			#Define our connection string
-			#conn_string = "' dbname='' user='' password=''"
-			#conn = psycopg2.connect(conn_string)
-			#cursor = conn.cursor()
-			
 			
 			#Pull global stock and index info from Yahoo
 			cursor.execute("SELECT symbol FROM stock_info where type <> 'equity' ORDER BY symbol asc;")
@@ -46,7 +40,6 @@ def yahoo_api():
 			url = 'https://query.yahooapis.com/v1/public/yql?q=' + yql + '&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys'
 			response = requests.get(url)
 			data = response.json()["query"]["results"]["quote"]
-			conn.close()
 
 			#Generate query and update database values
 			for stock in data:
@@ -58,6 +51,8 @@ def yahoo_api():
 					last_updated = CURRENT_TIMESTAMP, change = " + netChange + ", \
 					change_perc = " + percentChange + " where symbol = '" + symbol + "';"
 				print ("{} : {} : {} : {}".format(symbol, lastPrice, netChange, percentChange))		
+				cursor.execute(SQL)
+				conn.commit()
 			
 			#Pull stock info from MarketData
 			cursor.execute("SELECT symbol FROM stock_info where type = 'equity' ORDER BY symbol asc;")
@@ -68,16 +63,17 @@ def yahoo_api():
 			response = requests.get(url)
 			data = response.json()['results']
 			for stock in data:
-				symbol = (stock["symbol"])
+				symbol = stock["symbol"].lower()
 				lastPrice = str((stock["lastPrice"]))
 				netChange = str((stock["netChange"]))
 				percentChange = str((stock["percentChange"]))
 				SQL = "update stock_info set current_price = " + lastPrice + ", \
 					last_updated = CURRENT_TIMESTAMP, change = " + netChange + ", \
 					change_perc = " + percentChange + " where symbol = '" + symbol + "';"
-				cursor.execute(SQL)
-				conn.commit()
 				print ("{} : {} : {} : {}".format(symbol, lastPrice, netChange, percentChange))
+				cursor.execute(SQL)
+				print (SQL)
+				conn.commit()
 
 			print ("\nClosing Connection")
 			print ("Time =", datetime.now().time(), "\n\n")
