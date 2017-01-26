@@ -22,8 +22,8 @@ def yahoo_api():
 			print("Time is "+str(now))
 			print ("Is market open? " + str(now > mktopen and now < mktclose))
 			if now < mktopen or now > mktclose:
-				print("Waiting one hour.....")
-				time.sleep(3600)
+				print("Waiting 30 min.....")
+				time.sleep(900)
 				continue
 			conn = connect.heroku()
 			cursor = conn.cursor()
