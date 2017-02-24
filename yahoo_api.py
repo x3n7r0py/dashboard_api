@@ -18,7 +18,7 @@ def yahoo_api():
 			#Connect to database
 			now = datetime.now()
 			mktopen = now.replace(hour=14, minute=45, second=0, microsecond=0)
-			mktclose = now.replace(hour=22, minute=30, second=0, microsecond=0)
+			mktclose = now.replace(hour=20, minute=30, second=0, microsecond=0)
 			print("Time is "+str(now))
 			print ("Is market open? " + str(now > mktopen and now < mktclose))
 			if now < mktopen or now > mktclose:
