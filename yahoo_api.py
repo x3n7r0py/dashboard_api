@@ -76,7 +76,7 @@ def yahoo_api():
 					change_perc = " + percentChange + " where symbol = '" + symbol + "';"
 				cursor.execute(SQL)
 				conn.commit()
-
+dsfgsdf
 			print ("\nClosing Connection")
 			print ("Time =", datetime.now().time(), "\n\n")
 			conn.close()
