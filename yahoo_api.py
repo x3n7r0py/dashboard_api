@@ -53,7 +53,10 @@ def yahoo_api():
 				print ("{} : {} : {} : {}".format(symbol, lastPrice, netChange, percentChange))		
 				cursor.execute(SQL)
 				conn.commit()
-			
+		except:
+			print ("Unexpected error:", sys.exc_info())
+			continue
+		try:
 			#Pull stock info from MarketData
 			cursor.execute("SELECT symbol FROM stock_info where type = 'equity' ORDER BY symbol asc;")
 			symbols = "";
@@ -77,12 +80,11 @@ def yahoo_api():
 			print ("\nClosing Connection")
 			print ("Time =", datetime.now().time(), "\n\n")
 			conn.close()
-			time.sleep(300)
-	
+			time.sleep(300)	
 		except:
 			print ("Unexpected error:", sys.exc_info())
 			time.sleep(300)
 			continue
 	 
 if __name__ == "__main__":
-	yahoo_api()zoes
+	yahoo_api()
