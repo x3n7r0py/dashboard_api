@@ -67,10 +67,10 @@ def yahoo_api():
 				lastPrice = str((stock["lastPrice"]))
 				netChange = str((stock["netChange"]))
 				percentChange = str((stock["percentChange"]))
+				print ("{} : {} : {} : {}".format(symbol, lastPrice, netChange, percentChange))
 				SQL = "update stock_info set current_price = " + lastPrice + ", \
 					last_updated = CURRENT_TIMESTAMP, change = " + netChange + ", \
 					change_perc = " + percentChange + " where symbol = '" + symbol + "';"
-				print ("{} : {} : {} : {}".format(symbol, lastPrice, netChange, percentChange))
 				cursor.execute(SQL)
 				conn.commit()
 
@@ -85,4 +85,4 @@ def yahoo_api():
 			continue
 	 
 if __name__ == "__main__":
-	yahoo_api()
+	yahoo_api()zoes
