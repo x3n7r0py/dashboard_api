@@ -55,7 +55,7 @@ def yahoo_api():
 				conn.commit()
 		except:
 			print ("Unexpected error:", sys.exc_info())
-			continue
+			pass
 		try:
 			#Pull stock info from MarketData
 			cursor.execute("SELECT symbol FROM stock_info where type = 'equity' ORDER BY symbol asc;")
@@ -76,7 +76,7 @@ def yahoo_api():
 					change_perc = " + percentChange + " where symbol = '" + symbol + "';"
 				cursor.execute(SQL)
 				conn.commit()
-dsfgsdf
+
 			print ("\nClosing Connection")
 			print ("Time =", datetime.now().time(), "\n\n")
 			conn.close()
